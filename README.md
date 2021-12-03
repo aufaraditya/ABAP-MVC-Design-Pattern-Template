@@ -6,9 +6,9 @@ MVC is to isolate the business logic from the User Interface which gives great d
 Generally, Model sends the data to controller and controller will pass that data to Views and views will display the data as per their nature. In SAP, our business logic(model) will not send data unless and until View request for an data because ABAP is event driven language. Like user has to run some transaction to get the data, means application view has to initiate the process and ask for the data from the Model. In this requesting process, Controller will help the view to be apart from the model.
 
 ## Summary
-Model – Model represents an object which deals with business logic.
-View – View represents the visualization of the data that model contains.
-Controller – Controller acts on both model and view. It controls the data flow into model object and updates the view whenever data changes. It keeps view and model separate.
+1. Model – Model represents an object which deals with business logic.
+2. View – View represents the visualization of the data that model contains.
+3. Controller – Controller acts on both model and view. It controls the data flow into model object and updates the view whenever data changes. It keeps view and model separate.
 
 ## Implementation
 
