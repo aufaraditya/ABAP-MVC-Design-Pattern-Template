@@ -1,28 +1,31 @@
-CLASS zcl_model DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class ZCL_MODEL definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    DATA t_vbak TYPE shp_vl10_vbak_t .
-    METHODS: get_data
-      IMPORTING ir_erdat TYPE tpmy_r_date.
+  data SALES_DOC_DATA type SHP_VL10_VBAK_T .
+
+  methods GET_DATA
+    importing
+      !RECORD_DATE type TPMY_R_DATE .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS zcl_model IMPLEMENTATION.
+CLASS ZCL_MODEL IMPLEMENTATION.
+
+
   METHOD get_data.
 *
 * Get data and save into attribute T_VBAK
     SELECT * FROM vbak
-           INTO  TABLE t_vbak
-           WHERE erdat IN ir_erdat.
+           INTO  TABLE sales_doc_data
+           WHERE erdat IN record_date.
 *
 *
   ENDMETHOD.
-
 ENDCLASS.

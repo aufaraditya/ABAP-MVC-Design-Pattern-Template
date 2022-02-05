@@ -1,28 +1,32 @@
-CLASS zcl_control DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+class ZCL_CONTROL definition
+  public
+  create public .
 
-  PUBLIC SECTION.
-    DATA: o_model TYPE REF TO zcl_model.
+public section.
 
-    METHODS: get_object
-      IMPORTING if_name TYPE char30.
+  data MODEL_OBJECT type ref to ZCL_MODEL .
+
+  methods GET_OBJECT
+    importing
+      !NAME type CHAR30 .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS zcl_control IMPLEMENTATION.
+CLASS ZCL_CONTROL IMPLEMENTATION.
+
+
   METHOD get_object .
 *
-    DATA: lo_object TYPE REF TO object.
+    DATA: object TYPE REF TO object.
 *
 * Generic object reference to importing class
-    CREATE OBJECT lo_object TYPE (if_name).
+    CREATE OBJECT object TYPE (name).
     IF sy-subrc = 0.
 *   Downcasting to assign generic object to O_MODEL
-      o_model ?= lo_object.
+      model_object ?= object.
     ENDIF.
 *
   ENDMETHOD.
