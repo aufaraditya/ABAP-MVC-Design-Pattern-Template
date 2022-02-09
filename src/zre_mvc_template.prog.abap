@@ -1,23 +1,29 @@
-*&---------------------------------------------------------------------*
-*& Report zre_mvc_template
-*&---------------------------------------------------------------------*
-*&
-*&---------------------------------------------------------------------*
 REPORT zre_mvc_template.
+
+
+
+CONSTANTS model_name TYPE char30 VALUE 'ZCL_MODEL'.
+CONSTANTS report_name TYPE lvc_title VALUE 'Sales Document Report'.
 
 START-OF-SELECTION.
 *----------------------------------------------------------------------
 * Controller
 *----------------------------------------------------------------------
-*
-* Initiate controller
-  DATA(controller) = NEW zcl_control(  ).
-*
-* Get the object from Control
-  controller->get_object(
-    EXPORTING
-      name = 'ZCL_MODEL' ).
 
+
+  TRY.
+      DATA(controller) = NEW zcl_control(  ).
+    CATCH cx_sy_create_object_error INTO DATA(object_error).
+      MESSAGE |{ object_error->get_text( ) }| TYPE 'E'.
+  ENDTRY.
+
+  TRY.
+      controller->get_object(
+        EXPORTING
+          name = model_name ).
+    CATCH cx_method_not_implemented INTO DATA(control_method_error).
+      MESSAGE |{ control_method_error->get_text( ) }| TYPE 'E'.
+  ENDTRY.
 
 
 
@@ -25,24 +31,25 @@ START-OF-SELECTION.
 *----------------------------------------------------------------------
 * Model - Business Logic
 *----------------------------------------------------------------------
-* Date Range
-  DATA: record_date      TYPE RANGE OF vbak-erdat.
+
+  DATA: doc_date      TYPE RANGE OF vbak-audat.
 
 
   INSERT VALUE #( sign = 'I'
                   option = 'BT'
                   low = '20170101'
                   high = '20171231'
-                  ) INTO record_date INDEX 1.
-*
-* Get data method
-  controller->model_object->get_data(
-    EXPORTING
-      record_date = record_date ).
+                  ) INTO doc_date INDEX 1.
 
 
+  TRY.
+      controller->model->get_sales_docs(
+        EXPORTING
+          doc_date = doc_date ).
 
-
+    CATCH cx_method_not_implemented INTO DATA(model_method_error).
+      MESSAGE |{ model_method_error->get_text( ) }| TYPE 'E'.
+  ENDTRY.
 
 
 
@@ -53,12 +60,18 @@ START-OF-SELECTION.
   TRY.
       cl_salv_table=>factory(
         IMPORTING
-          r_salv_table = DATA(alv_object)
+          r_salv_table = DATA(alv)
         CHANGING
-          t_table      = controller->model_object->sales_doc_data ).
-    CATCH cx_salv_msg INTO DATA(msg).
+          t_table      = controller->model->sales_docs ).
+    CATCH cx_salv_msg INTO DATA(alv_error).
+      MESSAGE |{ alv_error->get_text( ) }| TYPE 'E'.
   ENDTRY.
-*
-*
-* Displaying the ALV
-  alv_object->display( ).
+
+  DATA(display_settings) = alv->get_display_settings( ).
+  display_settings->set_striped_pattern( if_salv_c_bool_sap=>true ).
+  display_settings->set_list_header( report_name ).
+
+  DATA(alv_columns) = alv->get_columns( ).
+  alv_columns->set_optimize( ).
+
+  alv->display( ).

@@ -11,14 +11,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_MODEL</CLSNAME>
-     <CMPNAME>SALES_DOC_DATA</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>SD Order Header</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>
